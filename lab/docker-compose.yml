@@ -1,0 +1,12 @@
+# Lab: servidor isca + Nuclei, numa rede Docker isolada (nada sai pra alvo de terceiro).
+services:
+  isca:
+    image: python:3.12-alpine
+    volumes: ["./isca.py:/isca.py:ro"]
+    command: ["python", "-u", "/isca.py"]
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    depends_on: [isca]
+    volumes: ["./resultados:/resultados"]
+    # -ni: sem interactsh (sem callback pra fora); só testa a isca local
+    command: ["-u", "http://isca:8080", "-severity", "critical,high", "-tags", "cve", "-ni", "-silent", "-jsonl", "-o", "/resultados/scan.jsonl", "-stats", "-si", "30"]

@@ -1,0 +1,3 @@
+# saída do lab (recrie com docker compose up)
+lab/resultados/
+.DS_Store
